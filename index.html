@@ -1,49 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>District Facilities Calendar</title>
+<meta charset="UTF-8">
+<title>IIQ Calendar Views</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+}
+
+.tabs {
   display: flex;
-  height: 100vh;
+  flex-wrap: wrap;
+  background-color: #1f3b6d;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 220px;
-  background: #1f3b6f;
+.tabs a {
+  padding: 12px 16px;
+  text-decoration: none;
   color: white;
-  overflow-y: auto;
-  padding-top: 20px;
+  font-size: 13px;
 }
 
-.sidebar button {
-  display: block;
-  width: 100%;
-  padding: 12px 20px;
-  background: none;
-  border: none;
-  color: white;
-  text-align: left;
-  cursor: pointer;
-  font-size: 14px;
+.tabs a:hover {
+  background-color: #2c4d89;
 }
 
-.sidebar button:hover,
-.sidebar button.active {
-  background: #2e528f;
-}
-
-/* Main content */
-.content {
-  flex: 1;
+.tabs a.active {
+  background-color: #162a4f;
+  font-weight: bold;
 }
 
 #public-calendar {
-  width: 100%;
-  height: 100vh
+  padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="tabs">
+  <a href="?view=admin" id="tab-admin">Admin</a>
+  <a href="?view=annex" id="tab-annex">Annex</a>
+  <a href="?view=blackburn" id="tab-blackburn">Blackburn</a>
+  <a href="?view=brown" id="tab-brown">Brown</a>
+  <a href="?view=claybon" id="tab-claybon">Claybon</a>
+  <a href="?view=criswell" id="tab-criswell">Criswell</a>
+  <a href="?view=crosby" id="tab-crosby">Crosby</a>
+  <a href="?view=dewberry" id="tab-dewberry">Dewberry</a>
+  <a href="?view=fhs" id="tab-fhs">FHS</a>
+  <a href="?view=griffin" id="tab-griffin">Griffin</a>
+  <a href="?view=henderson" id="tab-henderson">Henderson</a>
+  <a href="?view=jackson" id="tab-jackson">Jackson</a>
+  <a href="?view=jacobs" id="tab-jacobs">Jacobs</a>
+  <a href="?view=johnson" id="tab-johnson">Johnson</a>
+  <a href="?view=jones" id="tab-jones">Jones</a>
+  <a href="?view=lewis" id="tab-lewis">Lewis</a>
+  <a href="?view=nfhs" id="tab-nfhs">NFHS</a>
+  <a href="?view=oc" id="tab-oc">OC</a>
+  <a href="?view=rhea" id="tab-rhea">Rhea</a>
+  <a href="?view=rhodes" id="tab-rhodes">Rhodes</a>
+  <a href="?view=smith" id="tab-smith">Smith</a>
+  <a href="?view=themer" id="tab-themer">Themer</a>
+  <a href="?view=warren" id="tab-warren">Warren</a>
+  <a href="?view=willett" id="tab-willett">Willett</a>
+  <a href="?view=wilson" id="tab-wilson">Wilson</a>
+</div>
+
+<div id="public-calendar"></div>
+
+<script>
+var origin = "https://forneyisd.incidentiq.com";
+
+const viewMap = {
+  admin: "4336b81c-4450-f011-8f7c-000d3a0db9a7",
+  annex: "d67dc734-87d4-f011-8195-000d3ae39c9e",
+  blackburn: "7400996b-a9c0-f011-8193-000d3a7c34a9",
+  brown: "71a519a9-39d1-f011-8195-000d3ae39c9e",
+  claybon: "f04942f9-9311-f111-832f-000d3a7bbbb6",
+  criswell: "a7ed1f1a-52c9-f011-8195-000d3ae39c9e",
+
+  crosby: "",      
+  dewberry: "",    
+  fhs: "",         
+  griffin: "",     
+  henderson: "",   
+  jackson: "",     
+  jacobs: "",      
+  johnson: "",     
+  jones: "",       
+  lewis: "",       
+  nfhs: "",        
+  oc: "",          
+  rhea: "",        
+  rhodes: "",      
+  smith: "",       
+  themer: "",      
+  warren: "",      
+  willett: "",     
+  wilson: ""       
+};
+
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+const selectedView = getQueryParam("view") || "admin";
+
+if (document.getElementById("tab-" + selectedView)) {
+  document.getElementById("tab-" + selectedView).classList.add("active");
+}
+
+(function(doc, tag, id){
+  if (doc.getElementById(id)) {return;}
+  var js = doc.createElement(tag);
+  js.id = id;
+  js.src = origin + "/core/shared/public-calendar.js";
+  js.type = "text/javascript";
+  doc.body.appendChild(js);
+}(document, 'script', 'public-calendar-script'));
+
+window.onload = function() {
+
+if (!viewMap[selectedView]) {
+  document.getElementById("public-calendar").innerHTML =
+    "<p style='color:red;'>View not configured yet.</p>";
+  return;
+}
+
+PublicCalendar.setOptions({
+  origin: origin,
+  targetId: "public-calendar",
+  upcoming: true,
+  viewId: viewMap[selectedView]
+});
+
+PublicCalendar.render();
+
+}
+</script>
+
+</body>
+</html>
