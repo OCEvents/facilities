@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Willett Calendar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div id="public-calendar"></div>
+
+<script>
+var origin = "https://forneyisd.incidentiq.com";
+(function(doc, tag, id){
+ var js = doc.getElementsByTagName(tag)[0];
+ if (doc.getElementById(id)) {return;}
+ js = doc.createElement(tag); js.id = id;
+ js.src = origin + "/core/shared/public-calendar.js";
+ js.type = "text/javascript";
+ doc.body.appendChild(js);
+}(document, 'script', 'public-calendar-script'));
+
+window.onload = function() {
+
+PublicCalendar.setOptions({
+  origin: origin,
+  targetId: "public-calendar",
+  upcoming: true,
+  viewId:"1219a593-b012-f111-832f-000d3a7bbbb6",
+});
+
+PublicCalendar.render();
+
+}
+</script>
+
+</body>
+</html>
